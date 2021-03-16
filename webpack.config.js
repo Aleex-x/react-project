@@ -3,13 +3,19 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 module.exports = {
   mode: 'development',
   output: {
-    filename: 'app.bundle.js'
+    filename: 'app.bundle.js',
+    publicPath: '/'
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: 'src/index.html'
     })
   ],
+  devServer: {
+    historyApiFallback: {
+      disableDotRule: true
+    }
+  },
   module: {
     rules: [
       {

@@ -1,6 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { Article, ImgWrapper, Img, Button } from './styles'
-import { MdFavoriteBorder } from 'react-icons/md'
+import React from 'react'
+import { Article, ImgWrapper, Img } from './styles'
+import { useLocalStorage } from '../../hooks/useLocalStorage'
+import { useNearScreen } from '../../hooks/useNearScreen'
+import { FavButton } from '../FavButton'
+import { UseLikeMutation } from '../../container/ToggleLikeMutation'
+import { Link } from '@reach/router'
 
 const DEFAULT_IMAGE = 'https://res.cloudinary.com/midudev/image/upload/w_150/v1555671700/category_cats.jpg'
 
@@ -9,51 +13,45 @@ export const PhotoCard = ({
   likes = 0,
   src = DEFAULT_IMAGE
 }) => {
-  const element = useRef(null)
-  const [show, setShow] = useState(false)
-
-  /**
-   * const observer = new window.IntersectionObserver(entries => {
-   * this isnt a good practice because not all the browsers
-   * supports it,
-   * we are first checking if the dependency is supported
-   * by the web browser
-   */
-  useEffect(() => {
-    Promise.resolve(
-      typeof window.IntersectionObserver !== 'undefined'
-        ? window.IntersectionObserver
-        : import('intersection-observer')
-    ).then(() => {
-      const observer = new window.IntersectionObserver(entries => {
-        const { isIntersecting } = entries[0]
-
-        if (isIntersecting) {
-          setShow(true)
-          observer.disconnect()
-        }
-      })
-
-      observer.observe(element.current)
+  const [show, element] = useNearScreen()
+  const key = `like-${id}`
+  const [liked, setLiked] = useLocalStorage(key, false)
+  const { toggleLikePhoto } = UseLikeMutation()
+  const handleFavClick = () => {
+    setLiked(!liked)
+    toggleLikePhoto({
+      variables: {
+        input: { id }
+      }
     })
-  }, [element])
+  }
 
   return (
     <Article ref={element}>
       {
         show &&
           <>
-            <a href={`/detail/${id}`}>
+            <Link to={`/detail/${id}`}>
               <ImgWrapper>
                 <Img src={src} />
               </ImgWrapper>
-            </a>
-
-            <Button>
-              <MdFavoriteBorder size='32px' /> likes!
-            </Button>
+            </Link>
+            <FavButton
+              liked={liked}
+              likes={likes}
+              onClick={handleFavClick}
+            />
           </>
       }
     </Article>
   )
 }
+
+/* <Query query={query} variables={{ id }}>
+            {
+                ({ loading, error, data = { photo: {} } }) => {
+                    const { photo = {} } = data;
+                    return (< PhotoCard {...photo} ></PhotoCard>)
+                }
+            }
+        </Query > */
