@@ -8,7 +8,7 @@ export const ListOfPhotoCards = ({
 }) => {
   // this object has a lot of valuable information
   const { loading, error, data } = useQuery(withPhotos, {
-    variables: {categoryId}
+    variables: { categoryId }
   })
 
   if (error) {

@@ -1,6 +1,5 @@
 import React from 'react'
 import { Article, ImgWrapper, Img } from './styles'
-import { useLocalStorage } from '../../hooks/useLocalStorage'
 import { useNearScreen } from '../../hooks/useNearScreen'
 import { FavButton } from '../FavButton'
 import { UseLikeMutation } from '../../container/ToggleLikeMutation'
@@ -10,15 +9,13 @@ const DEFAULT_IMAGE = 'https://res.cloudinary.com/midudev/image/upload/w_150/v15
 
 export const PhotoCard = ({
   id,
+  liked,
   likes = 0,
   src = DEFAULT_IMAGE
 }) => {
   const [show, element] = useNearScreen()
-  const key = `like-${id}`
-  const [liked, setLiked] = useLocalStorage(key, false)
   const { toggleLikePhoto } = UseLikeMutation()
   const handleFavClick = () => {
-    setLiked(!liked)
     toggleLikePhoto({
       variables: {
         input: { id }
