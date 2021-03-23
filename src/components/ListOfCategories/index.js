@@ -24,7 +24,7 @@ const useCagetoriesData = () => {
   return { categories, loading }
 }
 
-export const ListOfCategories = () => {
+const ListOfCategoriesComponent = () => {
   const { categories, loading } = useCagetoriesData()
   /* useState is the coolest way right now to modify the state
    of our application, you need to define first
@@ -131,3 +131,8 @@ export const ListOfCategories = () => {
   />
   but in this case we use {...category} what it works nicer!
 */
+
+/**
+ * this prevents to reload the component if the props are not diff
+ */
+export const ListOfCategories = React.memo(ListOfCategoriesComponent)

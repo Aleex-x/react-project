@@ -1,0 +1,6 @@
+{
+  "baseUrl": "https://petgram-server-jrmfsd-okxluew9o.now.sh",
+  "chromeWebSecurity": false,
+  "viewportWidth": 500,
+  "viewportHeight": 800
+}
